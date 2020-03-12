@@ -1,5 +1,6 @@
 function validateSubmitDate(value) {
   // TODO check if submit date have valid format
+  // TODO split this validator to error handling and requirements validation
   // if (!(value instanceof Date)) {
   //   throw new Error('Submit date must be a Date type')
   // }
@@ -53,15 +54,32 @@ function CalculateDueDate(submitDate, turnaround) {
   const fullDays = turnaround / 8;
   const restHours = turnaround % 8;
   let startDate = new Date(submitDate);
-
-  for (let i = 1; i < fullDays; i++) {
+  console.log(startDate);
+  let dateHours = startDate.getHours();
+  startDate.setHours(9);
+  dateHours += restHours - 9;
+  for (let i = 0; i < fullDays; i++) {
     startDate.setDate(startDate.getDate() + 1);
+
     if (isWeekends(startDate)) {
       startDate.setDate(startDate.getDate() + 2);
     }
   }
+
+  if (dateHours >= 8) {
+    startDate.setDate(startDate.getDate() + 1);
+    if (isWeekends(startDate)) {
+      startDate.setDate(startDate.getDate() + 2);
+    }
+
+    dateHours -= 8;
+  }
+
+  startDate.setHours(startDate.getHours() + dateHours);
+
+  return startDate.toLocaleString({ timeZone: 'Europe/Kiev' });
 }
 
 CalculateDueDate = validateDecorator(CalculateDueDate, [validateSubmitDate, validateTurnAround]);
 
-CalculateDueDate('9 Mar 2020 10:59:00 GMT', 48);
+CalculateDueDate('9 Mar 2020 16:59:00 GMT+0200', 48);
