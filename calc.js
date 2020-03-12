@@ -1,4 +1,9 @@
 function validateSubmitDate(value) {
+  // TODO check if submit date have valid format
+  // if (!(value instanceof Date)) {
+  //   throw new Error('Submit date must be a Date type')
+  // }
+
   const startDate = Date.parse(value);
 
   if (isNaN(startDate)) {
@@ -6,11 +11,10 @@ function validateSubmitDate(value) {
   }
 
   const dateRightFormat = new Date(value);
-
   const checkDay = dateRightFormat.getDay();
   const checkHour = dateRightFormat.getHours();
 
-  if (checkDay === 1 || checkDay === 0) {
+  if (checkDay === 6 || checkDay === 0) {
     throw new Error('Please, provide working day (Mon to Fri)');
   }
   if (checkHour < 8 || checkHour > 16) {
@@ -37,10 +41,27 @@ function validateDecorator(f, checks) {
   };
 }
 
+function isWeekends(date) {
+  const day = date.getDay();
+  if (day === 6) {
+    return true;
+  }
+  return false;
+}
+
 function CalculateDueDate(submitDate, turnaround) {
-  console.log('test');
+  const fullDays = turnaround / 8;
+  const restHours = turnaround % 8;
+  let startDate = new Date(submitDate);
+
+  for (let i = 1; i < fullDays; i++) {
+    startDate.setDate(startDate.getDate() + 1);
+    if (isWeekends(startDate)) {
+      startDate.setDate(startDate.getDate() + 2);
+    }
+  }
 }
 
 CalculateDueDate = validateDecorator(CalculateDueDate, [validateSubmitDate, validateTurnAround]);
 
-CalculateDueDate('10 Mar 2020 10:59:00 GMT', 55);
+CalculateDueDate('9 Mar 2020 10:59:00 GMT', 48);
