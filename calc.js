@@ -51,27 +51,25 @@ function isWeekends(date) {
 }
 
 function CalculateDueDate(submitDate, turnaround) {
+  addingDays = () => {
+    startDate.setDate(startDate.getDate() + 1);
+    if (isWeekends(startDate)) {
+      startDate.setDate(startDate.getDate() + 2);
+    }
+  };
+
   const fullDays = turnaround / 8;
   const restHours = turnaround % 8;
   let startDate = new Date(submitDate);
-  console.log(startDate);
   let dateHours = startDate.getHours();
   startDate.setHours(9);
   dateHours += restHours - 9;
   for (let i = 0; i < fullDays; i++) {
-    startDate.setDate(startDate.getDate() + 1);
-
-    if (isWeekends(startDate)) {
-      startDate.setDate(startDate.getDate() + 2);
-    }
+    addingDays();
   }
 
   if (dateHours >= 8) {
-    startDate.setDate(startDate.getDate() + 1);
-    if (isWeekends(startDate)) {
-      startDate.setDate(startDate.getDate() + 2);
-    }
-
+    addingDays();
     dateHours -= 8;
   }
 
