@@ -8,7 +8,7 @@ function validateSubmitDate(value) {
   const startDate = Date.parse(value);
 
   if (isNaN(startDate)) {
-    throw new Error('Please, provide valid data format');
+    throw new Error('Please, provide valid date format');
   }
 
   const dateRightFormat = new Date(value);
@@ -21,8 +21,7 @@ function validateSubmitDate(value) {
   if (checkHour < 8 || checkHour > 16) {
     throw new Error('Please, provide working hours (from 9AM to 17PM)');
   }
-
-  return true;
+  return;
 }
 
 function validateTurnAround(value) {
@@ -30,7 +29,10 @@ function validateTurnAround(value) {
     throw new Error('Please, provide integer number of turnaround hours');
   }
 
-  return true;
+  if (value <= 0) {
+    throw new Error('Please, provide positive number');
+  }
+  return;
 }
 
 function validateDecorator(f, checks) {
