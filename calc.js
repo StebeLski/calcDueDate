@@ -1,5 +1,11 @@
 const { validateSubmitDate, validateTurnAround, validateDecorator, isWeekends } = require('./utils/helpers');
-
+/**
+ *
+ * @param {string} submitDate string date
+ * @param {number} turnaround integer posotive number
+ *
+ * @returns {date}  calculating date in local format and kyiv timezone
+ */
 function CalculateDueDate(submitDate, turnaround) {
   const fullDays = turnaround / 8;
   const restHours = turnaround % 8;
